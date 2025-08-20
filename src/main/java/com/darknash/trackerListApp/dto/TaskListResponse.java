@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateTaskListResponse {
+public class TaskListResponse {
 
     private UUID id;
 
@@ -20,5 +20,5 @@ public class CreateTaskListResponse {
 
     private String description;
 
-    private List<CreateTaksResponse> taks;
+    private List<TaskResponse> taks;
 }

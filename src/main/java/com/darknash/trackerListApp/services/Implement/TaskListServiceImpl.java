@@ -1,6 +1,6 @@
 package com.darknash.trackerListApp.services.Implement;
 
-import com.darknash.trackerListApp.dto.CreateTaskListResponse;
+import com.darknash.trackerListApp.dto.TaskListResponse;
 import com.darknash.trackerListApp.dto.CreateTaskListsRequest;
 import com.darknash.trackerListApp.dto.UpdateTaskListRequest;
 import com.darknash.trackerListApp.entities.TaskList;
@@ -25,7 +25,7 @@ public class TaskListServiceImpl implements TaskListService {
     }
 
     @Override
-    public CreateTaskListResponse getCreateTaskListsRequest(CreateTaskListsRequest request) {
+    public TaskListResponse getCreateTaskListsRequest(CreateTaskListsRequest request) {
         TaskList taskList = new TaskList();
         taskList.setId(UUID.randomUUID());
         taskList.setTitle(request.getTitle());
@@ -49,4 +49,5 @@ public class TaskListServiceImpl implements TaskListService {
     public UpdateTaskListRequest getUpdateTaksListRequest(UUID id, UpdateTaskListRequest request) {
         return null;
     }
+
 }
