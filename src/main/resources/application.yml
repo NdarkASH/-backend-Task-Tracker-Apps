@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    username: 'darknash'
+    password: 'hitambangetjir'
+    url: 'jdbc:postgresql://localhost:5432/tracker-list'
+    driver-class-name: org.postgresql.Driver
+
+
+
+  application:
+    name: tracker-list-app
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+

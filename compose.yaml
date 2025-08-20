@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=tracker-list'
+      - 'POSTGRES_PASSWORD=hitambangetjir'
+      - 'POSTGRES_USER=Darknash'
+    ports:
+      - '5432:5432'
