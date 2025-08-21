@@ -1,5 +1,6 @@
 package com.darknash.trackerListApp.services.Implement;
 
+import com.darknash.trackerListApp.Utils.TaskMapper;
 import com.darknash.trackerListApp.dto.*;
 import com.darknash.trackerListApp.entities.Task;
 import com.darknash.trackerListApp.exceptions.NotFoundException;
@@ -24,23 +25,23 @@ public class TaskServiceImpl implements TaskService {
         List<Task> tasks =taskRepository.findAll();
 
         return tasks.stream()
-                .map(this::toResponse)
+                .map(TaskMapper::toResponse)
                 .toList();
     }
 
     @Override
     public TaskResponse createTaks(CreateTaskRequest request) {
         Task task = new Task();
-        toEntity(task, request);
+        TaskMapper.toEntity(task, request);
         Task savedTask = taskRepository.save(task);
-        return toResponse(savedTask);
+        return TaskMapper.toResponse(savedTask);
     }
 
     @Override
     public TaskResponse findTaskById(UUID id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(()-> new NotFoundException("Task not found"));
-        return toResponse(task);
+        return TaskMapper.toResponse(task);
     }
 
     @Override
@@ -51,37 +52,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskResponse updateTask(UUID id, UpdateTaskRequest request) {
+    public TaskResponse updateTask(UUID id, CreateTaskRequest request) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(()-> new NotFoundException("Task not found"));
         Task savedTask = taskRepository.save(task);
-        return toResponse(savedTask);
-    }
-
-
-
-    private void toEntity(Task task, CreateTaskRequest request) {
-        task.setTitle(request.getTitle());
-        task.setStatus(request.getStatus());
-        task.setDescription(request.getDescription());
-        task.setDueDate(request.getDueDate());
-        task.setPriority(request.getPriority());
-        task.setCreatedAt(request.getCreatedAt());
-        task.setUpdatedAt(request.getUpdatedAt());
-    }
-
-    private TaskResponse toResponse (Task task) {
-
-        return TaskResponse.builder()
-                .id(task.getId())
-                .title(task.getTitle())
-                .status(task.getStatus())
-                .description(task.getDescription())
-                .dueDate(task.getDueDate())
-                .priority(task.getPriority())
-                .createdAt(task.getCreatedAt())
-                .updatedAt(task.getUpdatedAt())
-                .build();
-
+        return TaskMapper.toResponse(savedTask);
     }
 }

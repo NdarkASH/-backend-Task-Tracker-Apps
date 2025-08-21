@@ -10,5 +10,5 @@ public interface TaskService {
     TaskResponse createTaks(CreateTaskRequest request);
     TaskResponse findTaskById(UUID id);
     void deleteTaskById(UUID id);
-    TaskResponse updateTask(UUID id, UpdateTaskRequest request);
+    TaskResponse updateTask(UUID id, CreateTaskRequest request);
 }
