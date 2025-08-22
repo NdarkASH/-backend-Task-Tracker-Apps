@@ -31,13 +31,23 @@ public class TaskController {
     }
 
     @GetMapping
-    private AppResponse<List<TaskResponse>> getTasks() {
+    private AppResponse<List<TaskResponse>> getTask() {
         List<TaskResponse> tasks = taskService.getTasks();
 
         return AppResponse.<List<TaskResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message(HttpStatus.OK.getReasonPhrase())
                 .data(tasks)
+                .build();
+    }
+    @GetMapping("/{id}")
+    private AppResponse<TaskResponse> findTaskByTaskId(@RequestParam UUID id) {
+        TaskResponse taskResponse = taskService.findTaskById(id);
+
+        return AppResponse.<TaskResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
+                .data(taskResponse)
                 .build();
     }
 
@@ -52,7 +62,7 @@ public class TaskController {
                 .build();
     }
 
-    @DeleteMapping
+    @DeleteMapping()
     private AppResponse<Void> deleteTask(@RequestParam UUID id) {
         taskService.deleteTaskById(id);
 

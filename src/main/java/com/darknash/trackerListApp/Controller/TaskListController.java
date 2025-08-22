@@ -41,8 +41,8 @@ public class TaskListController {
                 .build();
     }
 
-    @GetMapping
-    private AppResponse<TaskListResponse> getTaskListResponseById(@RequestParam("id") UUID id) {
+    @GetMapping("/{id}")
+    private AppResponse<TaskListResponse> getTaskListResponseById(@RequestParam UUID id) {
         TaskListResponse taskListResponse = taskListService.findTaksListById(id);
 
         return AppResponse.<TaskListResponse>builder()
