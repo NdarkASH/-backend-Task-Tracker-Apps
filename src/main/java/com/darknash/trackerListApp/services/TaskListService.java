@@ -2,6 +2,7 @@ package com.darknash.trackerListApp.services;
 
 import com.darknash.trackerListApp.dto.TaskListResponse;
 import com.darknash.trackerListApp.dto.CreateTaskListsRequest;
+import com.darknash.trackerListApp.entities.Task;
 
 import java.util.List;
 import java.util.UUID;

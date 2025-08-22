@@ -20,5 +20,7 @@ public class TaskListResponse {
 
     private String description;
 
+    private Double progress;
+
     private List<TaskResponse> taks;
 }
