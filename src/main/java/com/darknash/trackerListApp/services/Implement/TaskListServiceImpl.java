@@ -3,29 +3,26 @@ package com.darknash.trackerListApp.services.Implement;
 
 import com.darknash.trackerListApp.Utils.TaskMapper;
 import com.darknash.trackerListApp.constants.TaskStatus;
+import com.darknash.trackerListApp.dto.CreateTaskRequest;
 import com.darknash.trackerListApp.dto.TaskListResponse;
 import com.darknash.trackerListApp.dto.CreateTaskListsRequest;
-import com.darknash.trackerListApp.dto.TaskResponse;
 import com.darknash.trackerListApp.entities.Task;
 import com.darknash.trackerListApp.entities.TaskList;
 import com.darknash.trackerListApp.repositories.TaskListRepository;
-import com.darknash.trackerListApp.repositories.TaskRepository;
 import com.darknash.trackerListApp.services.TaskListService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class TaskListServiceImpl implements TaskListService {
     private final TaskListRepository taskListRepository;
-    private final TaskRepository taskRepository;
 
     @Override
     public List<TaskListResponse> getTaksLists() {
@@ -43,17 +40,17 @@ public class TaskListServiceImpl implements TaskListService {
         TaskList taskList = new TaskList();
         taskList.setTitle(request.getTitle());
         taskList.setDescription(request.getDescription());
-        taskList.setTasks(setTaskToTaskList(taskList, request));
+        taskList.setTasks(
+        Optional.ofNullable(request.getTaks())
+                .map(tasks -> tasks
+                        .stream()
+                        .map(TaskMapper::toEntity)
+                        .toList())
+                .orElse(null)
+        );
         taskListRepository.save(taskList);
 
-
-        return TaskListResponse.builder()
-                .id(taskList.getId())
-                .title(taskList.getTitle())
-                .description(taskList.getDescription())
-                .taks(setTaskToTaskList(taskList))
-                .progress(calculateProgressTask(taskList.getTasks()))
-                .build();
+        return toResponseTaskList(taskList);
 
     }
 
@@ -72,20 +69,35 @@ public class TaskListServiceImpl implements TaskListService {
 
     @Override
     public TaskListResponse getUpdateTaksListRequest(UUID id, CreateTaskListsRequest request) {
-        TaskList taskList = taskListRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("TaskList with id " + id + " not found"));
+
+        TaskList taskList = taskListRepository.findById(id).orElseThrow(() -> new RuntimeException("TaskList with id " + id + " not found"));
         taskList.setTitle(request.getTitle());
         taskList.setDescription(request.getDescription());
-        taskList.setTasks(setTaskToTaskList(taskList, request));
-        taskListRepository.save(taskList);
+        taskList.setTasks(setTaskToTaskList(request.getTaks()));
+
+        if (taskList.getTasks().isEmpty()) {
+            throw new EntityNotFoundException("TaskList with id " + id + " not found");
+        }
+
+        if (!Objects.equals(taskList.getId(), id)) {
+            throw new IllegalArgumentException("TaskList with id " + id + " is not the same");
+        }
+
+        TaskList existingTaskList = taskListRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("TaskList with id " + id + " not found"));
+
+        existingTaskList.setTitle(taskList.getTitle());
+        existingTaskList.setDescription(taskList.getDescription());
+        existingTaskList.setTasks(taskList.getTasks());
+        taskListRepository.save(existingTaskList);
 
         return toResponseTaskList(taskList);
     }
 
-    private List<TaskResponse> setTaskToTaskList(TaskList taskList) {
-        return  taskList.getTasks()
-                .stream()
-                .map(TaskMapper::toResponse)
-                .toList();
+    private List<Task> setTaskToTaskList(List<CreateTaskRequest> request) {
+       return request.stream()
+               .map(TaskMapper::toEntity)
+               .collect(Collectors.toList());
     }
 
 
@@ -102,20 +114,12 @@ public class TaskListServiceImpl implements TaskListService {
     }
 
 
-    private List<Task> setTaskToTaskList(TaskList taskList, CreateTaskListsRequest request) {
-        List<Task> tasks = Optional.ofNullable(request.getTaks())
-                .map(taskId -> taskRepository.findAllById(request.getTaks()))
-                .orElseThrow(()-> new RuntimeException("TaskList with id " + request.getTaks() + " not found"));
-        taskList.setTasks(tasks);
-        return tasks;
-    }
-
     private TaskListResponse toResponseTaskList (TaskList taskList) {
         return TaskListResponse.builder()
                 .id(taskList.getId())
                 .title(taskList.getTitle())
                 .description(taskList.getDescription())
-                .taks(setTaskToTaskList(taskList))
+                .taks(taskList.getTasks())
                 .progress(calculateProgressTask(taskList.getTasks()))
                 .build();
     }

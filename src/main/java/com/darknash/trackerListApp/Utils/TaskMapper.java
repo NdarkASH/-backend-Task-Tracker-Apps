@@ -7,7 +7,13 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class TaskMapper {
-    public void toEntity(Task task, CreateTaskRequest request) {
+    public Task toEntity(CreateTaskRequest request) {
+        Task task = new Task();
+
+        if (request.getId() != null) {
+            task.setId(request.getId());
+        }
+
         task.setTitle(request.getTitle());
         task.setStatus(request.getStatus());
         task.setDescription(request.getDescription());
@@ -15,6 +21,7 @@ public class TaskMapper {
         task.setPriority(request.getPriority());
         task.setCreatedAt(request.getCreatedAt());
         task.setUpdatedAt(request.getUpdatedAt());
+        return task;
     }
 
     public TaskResponse toResponse (Task task) {

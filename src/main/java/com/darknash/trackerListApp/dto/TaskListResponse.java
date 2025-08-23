@@ -1,5 +1,6 @@
 package com.darknash.trackerListApp.dto;
 
+import com.darknash.trackerListApp.entities.Task;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,5 +23,5 @@ public class TaskListResponse {
 
     private Double progress;
 
-    private List<TaskResponse> taks;
+    private List<Task> taks;
 }

@@ -32,7 +32,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponse createTaks(CreateTaskRequest request) {
         Task task = new Task();
-        TaskMapper.toEntity(task, request);
+        TaskMapper.toEntity(request);
         Task savedTask = taskRepository.save(task);
         return TaskMapper.toResponse(savedTask);
     }

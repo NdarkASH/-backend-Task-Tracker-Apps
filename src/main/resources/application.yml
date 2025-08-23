@@ -7,10 +7,17 @@ spring:
 
 
 
+
   application:
     name: tracker-list-app
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
+    properties:
+       hibernate:
+        format_sql: true   # biar lebih rapi
+        show_sql: true     # alternatif untuk memastikan selalu tampil
+        use_sql_comments: true   # kasih komentar tambahan
 
 

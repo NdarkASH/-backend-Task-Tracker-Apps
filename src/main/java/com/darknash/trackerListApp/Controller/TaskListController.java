@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/v1/task-list")
+@RequestMapping(path = "/api/task-lists")
 public class TaskListController {
 
     private final TaskListService taskListService;
@@ -41,8 +41,8 @@ public class TaskListController {
                 .build();
     }
 
-    @GetMapping("/{id}")
-    private AppResponse<TaskListResponse> getTaskListResponseById(@RequestParam UUID id) {
+    @GetMapping(path = "/{id}")
+    private AppResponse<TaskListResponse> getTaskListResponseById(@PathVariable UUID id) {
         TaskListResponse taskListResponse = taskListService.findTaksListById(id);
 
         return AppResponse.<TaskListResponse>builder()
@@ -63,8 +63,8 @@ public class TaskListController {
                 .build();
     }
 
-    @DeleteMapping
-    private AppResponse<Void> deleteTaskList(@RequestParam UUID id) {
+    @DeleteMapping(path = "{id}")
+    private AppResponse<Void> deleteTaskList(@PathVariable UUID id) {
         taskListService.deleteTaksListById(id);
 
         return AppResponse.<Void>builder()
