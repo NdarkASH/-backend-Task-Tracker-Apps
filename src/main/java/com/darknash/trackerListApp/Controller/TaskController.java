@@ -1,26 +1,34 @@
 package com.darknash.trackerListApp.Controller;
 
+import com.darknash.trackerListApp.Utils.TaskMapper;
 import com.darknash.trackerListApp.dto.AppResponse;
 import com.darknash.trackerListApp.dto.CreateTaskRequest;
 import com.darknash.trackerListApp.dto.TaskResponse;
+import com.darknash.trackerListApp.entities.Task;
 import com.darknash.trackerListApp.services.TaskService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RestController
-@RequestMapping(path = "/api/task")
+@RequestMapping(path = "/api/task-lists/{task_list_id}/tasks")
 @RequiredArgsConstructor
 public class TaskController {
 
     private final TaskService taskService;
 
+
     @PostMapping
-    private AppResponse<TaskResponse> createTask(@RequestBody CreateTaskRequest request) {
-        TaskResponse taskResponse = taskService.createTaks(request);
+    private AppResponse<TaskResponse> createTask(@PathVariable UUID task_list_id, @RequestBody CreateTaskRequest request) {
+        log.info("Create task: {}", request);
+
+        Task task = TaskMapper.toEntity(request);
+        TaskResponse taskResponse = taskService.createTaks(task_list_id, task);
 
         return AppResponse.<TaskResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -31,8 +39,8 @@ public class TaskController {
     }
 
     @GetMapping
-    private AppResponse<List<TaskResponse>> getTask() {
-        List<TaskResponse> tasks = taskService.getTasks();
+    private AppResponse<List<TaskResponse>> getAllTask(@PathVariable UUID task_list_id) {
+        List<TaskResponse> tasks = taskService.getTasks(task_list_id);
 
         return AppResponse.<List<TaskResponse>>builder()
                 .code(HttpStatus.OK.value())

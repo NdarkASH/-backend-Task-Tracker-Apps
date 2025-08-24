@@ -2,6 +2,7 @@ package com.darknash.trackerListApp.dto;
 
 import com.darknash.trackerListApp.constants.TaksPriority;
 import com.darknash.trackerListApp.constants.TaskStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Builder
 public class CreateTaskRequest {
 
-    private UUID id;
+    private UUID uuid;
 
     private String title;
 

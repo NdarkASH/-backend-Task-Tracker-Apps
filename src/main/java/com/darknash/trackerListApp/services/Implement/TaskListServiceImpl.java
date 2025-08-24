@@ -3,7 +3,6 @@ package com.darknash.trackerListApp.services.Implement;
 
 import com.darknash.trackerListApp.Utils.TaskMapper;
 import com.darknash.trackerListApp.constants.TaskStatus;
-import com.darknash.trackerListApp.dto.CreateTaskRequest;
 import com.darknash.trackerListApp.dto.TaskListResponse;
 import com.darknash.trackerListApp.dto.CreateTaskListsRequest;
 import com.darknash.trackerListApp.entities.Task;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -73,7 +71,6 @@ public class TaskListServiceImpl implements TaskListService {
         TaskList taskList = taskListRepository.findById(id).orElseThrow(() -> new RuntimeException("TaskList with id " + id + " not found"));
         taskList.setTitle(request.getTitle());
         taskList.setDescription(request.getDescription());
-        taskList.setTasks(setTaskToTaskList(request.getTaks()));
 
         if (taskList.getTasks().isEmpty()) {
             throw new EntityNotFoundException("TaskList with id " + id + " not found");
@@ -92,12 +89,6 @@ public class TaskListServiceImpl implements TaskListService {
         taskListRepository.save(existingTaskList);
 
         return toResponseTaskList(taskList);
-    }
-
-    private List<Task> setTaskToTaskList(List<CreateTaskRequest> request) {
-       return request.stream()
-               .map(TaskMapper::toEntity)
-               .collect(Collectors.toList());
     }
 
 

@@ -41,9 +41,9 @@ public class TaskListController {
                 .build();
     }
 
-    @GetMapping(path = "/{id}")
-    private AppResponse<TaskListResponse> getTaskListResponseById(@PathVariable UUID id) {
-        TaskListResponse taskListResponse = taskListService.findTaksListById(id);
+    @GetMapping(path = "/{task_list_id}")
+    private AppResponse<TaskListResponse> getTaskListResponseById(@PathVariable UUID task_list_id) {
+        TaskListResponse taskListResponse = taskListService.findTaksListById(task_list_id);
 
         return AppResponse.<TaskListResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -52,9 +52,9 @@ public class TaskListController {
                 .build();
     }
 
-    @PutMapping(path = "/{id}")
-    private AppResponse<TaskListResponse> updateTaskList(@PathVariable UUID id, CreateTaskListsRequest request) {
-        TaskListResponse taskListResponse = taskListService.getUpdateTaksListRequest(id, request);
+    @PutMapping(path = "/{taks_list_id}")
+    private AppResponse<TaskListResponse> updateTaskList(@PathVariable UUID taks_list_id, CreateTaskListsRequest request) {
+        TaskListResponse taskListResponse = taskListService.getUpdateTaksListRequest(taks_list_id, request);
 
         return AppResponse.<TaskListResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -63,9 +63,9 @@ public class TaskListController {
                 .build();
     }
 
-    @DeleteMapping(path = "{id}")
-    private AppResponse<Void> deleteTaskList(@PathVariable UUID id) {
-        taskListService.deleteTaksListById(id);
+    @DeleteMapping(path = "{task_list_id}")
+    private AppResponse<Void> deleteTaskList(@PathVariable UUID task_list_id) {
+        taskListService.deleteTaksListById(task_list_id);
 
         return AppResponse.<Void>builder()
                 .code(HttpStatus.NO_CONTENT.value())

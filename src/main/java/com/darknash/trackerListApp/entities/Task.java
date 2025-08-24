@@ -28,8 +28,10 @@ public class Task {
 
     private LocalDateTime dueDate;
 
+    @Enumerated(EnumType.STRING)
     private TaksPriority priority;
 
+    @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
     private LocalDateTime createdAt;

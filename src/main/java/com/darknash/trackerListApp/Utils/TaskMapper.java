@@ -10,8 +10,8 @@ public class TaskMapper {
     public Task toEntity(CreateTaskRequest request) {
         Task task = new Task();
 
-        if (request.getId() != null) {
-            task.setId(request.getId());
+        if (request.getUuid() != null) {
+            task.setId(request.getUuid());
         }
 
         task.setTitle(request.getTitle());
