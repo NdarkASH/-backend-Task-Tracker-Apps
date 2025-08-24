@@ -83,7 +83,15 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponse updateTask(UUID id, CreateTaskRequest request) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(()-> new NotFoundException("Task not found"));
-        Task savedTask = taskRepository.save(task);
-        return TaskMapper.toResponse(savedTask);
+        task.setTitle(request.getTitle());
+        task.setDescription(request.getDescription());
+        task.setPriority(request.getPriority());
+        task.setDueDate(LocalDateTime.now());
+        task.setCreatedAt(LocalDateTime.now());
+        task.setUpdatedAt(LocalDateTime.now());
+        task.setPriority(request.getPriority());
+        task.setStatus(request.getStatus());
+        taskRepository.save(task);
+        return TaskMapper.toResponse(task);
     }
 }

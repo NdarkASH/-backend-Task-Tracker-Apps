@@ -17,7 +17,7 @@ import java.util.UUID;
 @Builder
 public class CreateTaskRequest {
 
-    private UUID uuid;
+    private UUID id;
 
     private String title;
 

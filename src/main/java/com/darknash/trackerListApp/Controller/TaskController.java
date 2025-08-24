@@ -49,7 +49,7 @@ public class TaskController {
                 .build();
     }
     @GetMapping("/{id}")
-    private AppResponse<TaskResponse> findTaskByTaskId(@RequestParam UUID id) {
+    private AppResponse<TaskResponse> findTaskByTaskId(@PathVariable UUID id) {
         TaskResponse taskResponse = taskService.findTaskById(id);
 
         return AppResponse.<TaskResponse>builder()
@@ -59,8 +59,8 @@ public class TaskController {
                 .build();
     }
 
-    @PutMapping
-    private AppResponse<TaskResponse> updateTask(@RequestParam UUID id, @RequestBody CreateTaskRequest request) {
+    @PutMapping("/{id}")
+    private AppResponse<TaskResponse> updateTask(@PathVariable UUID id, @RequestBody CreateTaskRequest request) {
         TaskResponse taskResponse = taskService.updateTask(id, request);
 
         return AppResponse.<TaskResponse>builder()
@@ -70,7 +70,7 @@ public class TaskController {
                 .build();
     }
 
-    @DeleteMapping()
+    @DeleteMapping("/{id}")
     private AppResponse<Void> deleteTask(@RequestParam UUID id) {
         taskService.deleteTaskById(id);
 
